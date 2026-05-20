@@ -39,6 +39,7 @@ Socket.IO Server
        │
        ▼
 Shared In-Memory Grid State
+```
 
 # Tech Stack Choices
 
