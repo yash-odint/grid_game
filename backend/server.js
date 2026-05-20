@@ -39,17 +39,39 @@ io.on("connection", (socket) => {
         };
 
         // tile.owner = "#ef4444"
-        tile.owner = getRandomHexColor();
+        tile.owner = socket.id;
+        tile.color = getRandomHexColor();
 
         // update all the users
         io.emit("tile_claimed", {
             tileId,
             owner: tile.owner,
+            color: tile.color
+        })
+    });
+
+    socket.on("unclaim_tile", (tileId) => {
+        const tile = grid.find((t) => t.id == tileId);
+
+        if(!tile) return;
+
+        if (tile.owner !== socket.id) return;
+
+        console.log(tile)
+        console.log(socket.id)
+
+        tile.owner = null;
+        tile.color = null;
+
+        io.emit("tile_unclaimed", {
+            tileId,
+            owner: null,
+            color: null
         })
     });
 
     socket.on("disconnect", () => {
-        console.log("User disconnected", socket.id);
+        console.log("user disconnected : ", socket.id);
     });
 });
 
